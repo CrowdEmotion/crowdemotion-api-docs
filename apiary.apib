@@ -288,8 +288,14 @@ For example, they can be useful when associating additional information to a use
 + Parameters
     + research_id (required, string, `3`) ... research id
 
-### List all research [GET /v1/research]
+### List all research [GET /v1/research{?skip,limit,where,sort}]
 Returns all the Research created by the admin user when logged in with an admin account.
+
++ Parameters
+    + skip: 1000 (optional, number) - The number of results to skip.
+    + limit: 1000 (optional, number) - The maximum number of results to return.
+    + where: {"research_id":56} (optional, string) - JSON formatted string condition.
+    + sort: "research_id" (optional, string) - Attribute used to sort results.
 
 + Response 200 (application/json)
 
@@ -409,9 +415,15 @@ mean to gather information in one place to augment the analysis phase outcomes.
 We also provide storage and streaming support for the actual video files as a
 courtesy to our customers.
 
-## Media Operations [/v1/media]
+## Media Operations [/v1/media{?skip,limit,where,sort}]
 
 ### List all registered Media [GET]
+
++ Parameters
+    + skip: 1000 (optional, number) - The number of results to skip.
+    + limit: 1000 (optional, number) - The maximum number of results to return.
+    + where: {"research_id":56} (optional, string) - JSON formatted string condition.
+    + sort: "research_id" (optional, string) - Attribute used to sort results.
 
 + Response 200 (application/json)
 
@@ -789,7 +801,7 @@ Returns all the Responses implementing the general rules for
 + Parameters
     + skip: 1000 (optional, number) - The number of results to skip.
     + limit: 1000 (optional, number) - The maximum number of results to return.
-    + where: {"research_id":56} (optional, string) - JSON formatted string condition. Cannot be combined with `research_id` parameter.
+    + where: {"research_id":56} (optional, string) - JSON formatted string condition.
     + sort: "research_id" (optional, string) - Attribute used to sort results.
 
 + Response 200 (application/json)
@@ -1030,7 +1042,14 @@ Common metric ID are listed below:
 + Parameters
     + metric_id (required, integer, `1`) ... Metric id.
 
-### List all registered metrics [GET /v1/metric]
+### List all registered metrics [GET /v1/metric{?skip,limit,where,sort}]
+
++ Parameters
+    + skip: 1000 (optional, number) - The number of results to skip.
+    + limit: 1000 (optional, number) - The maximum number of results to return.
+    + where: {"metricType":3} (optional, string) - JSON formatted string condition.
+    + sort: "metricType" (optional, string) - Attribute used to sort results.
+
 + Response 200 (application/json)
 
         [
