@@ -13,17 +13,20 @@ The base address of the API is [http://api.crowdemotion.co.uk](http://api.crowde
 Almost all endpoints are restricted and a user will require an account to be able to save or
 get information through them. See more information in _Authentication_ section.
 
-> _Last Updated: 20160511_
+Following is more detailed information about the API functionality and some
+considerations before using it.
+
+If you prefer, go straightforward to the [endpoints documentation](#reference/account).
 
 ## Overview
 
 ### Basic Workflow
 
 1. Capture videos of faces using a webcam or equipment of your choice
-2. Upload the FaceVideos using CloudEmotion for processing ([facevideo [POST] or [PUT]](/#reference/face-videos/face-video-operations/analyse-face-video))
+2. Upload the FaceVideos using CloudEmotion for processing ([FaceVideo [POST] or [PUT]](#reference/facevideos/facevideo-operations/analyse-facevideo))
 3. Retrieve the results ([timeseries [GET]](#reference/timeseries/timeseries-operations/get-all-recorded-timeseries-for-a-response))
 
-See below for [advanced workflows](#reference/details).
+See below for [advanced workflows](#introduction/details/advanced-workflows).
 
 
 ### Results
@@ -53,7 +56,7 @@ Follow us [@CrowdEmotion](https://twitter.com/crowdemotion) on Twitter to get up
 ### Sandbox Mode
 A sandbox mode is available for free testing.
 
-Just set the `sandbox` parameter equal to `true` in [facevideo [POST]](#reference/face-videos/face-video-operations/analyse-face-video) methods.
+Just set the `sandbox` parameter equal to `true` in [FaceVideo [POST]](#reference/facevideos/facevideo-operations/analyse-facevideo) methods.
 The API calls are identical but the results are randomly generated.
 
 
@@ -76,16 +79,16 @@ Advanced (administrative) workflows are supported in v1.1 of our API.
 2. Register link to FaceVideo
 
 #### Simple FaceVideo analysis
-A simple way to analyse a FaceVideo without doing several steps, such creating a Research, assigning Respondents and others, is to use the [FaceVideo [POST]](#reference/face-videos/face-video-operations/analyse-face-video) endpoint.
+A simple way to analyse a FaceVideo without doing several steps, such creating a Research, assigning Respondents and others, is to use the [FaceVideo [POST]](#reference/facevideos/facevideo-operations/analyse-facevideo) endpoint.
 This will automatically create the metadata required to register the FaceVideo and return the Response's id for accessing the results.
 
-To check for analysis completion, just call the [FaceVideo [GET]](#reference/face-videos/face-video-operations/single-face-video-details) endpoint.
+To check for analysis completion, just call the [FaceVideo [GET]](#reference/facevideos/facevideo-operations/find-a-facevideo) endpoint.
 
 
 ### Implementation Status
 Currently we have implemented:
 
-* the _basic level_ (API v1.0) i.e. the respondent workflow calls which are described in [FaceVideo group methods](#reference/face-videos)
+* the _basic level_ (API v1.0) i.e. the respondent workflow calls which are described in [FaceVideo group methods](#reference/facevideos)
 * the _advanced level_ (API v1.1) all the basic entities that can help store and manage an entire project.
 
 To help our customers, each method or group of methods in this documentation has a label indicating its implementation status.
@@ -189,7 +192,7 @@ advisable to create a new token with lower authorization level and use it in you
 ## API Clients
 Before jumping on your code editor, try our example client implementations available at our Github account: https://github.com/CrowdEmotion
 
-A sandbox mode is available for testing (see [FaceVideo [POST]](#reference/face-videos/face-video-operations/analyse-face-video) endpoint).
+A sandbox mode is available for testing (see [FaceVideo [POST]](#reference/facevideos/facevideo-operations/analyse-facevideo) endpoint).
 
 Following is a list of client implementations available in several programming languages:
 
