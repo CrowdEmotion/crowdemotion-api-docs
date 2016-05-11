@@ -20,7 +20,7 @@ get information through them. See more information in _Authentication_ section.
 ## Basic Workflow
 
 1. Capture videos of faces using a webcam or equipment of your choice
-2. Upload the face videos using CloudEmotion for processing ([facevideo [POST] or [PUT]](/#reference/face-videos/face-video-operations/analyse-face-video))
+2. Upload the FaceVideos using CloudEmotion for processing ([facevideo [POST] or [PUT]](/#reference/face-videos/face-video-operations/analyse-face-video))
 3. Retrieve the results ([timeseries [GET]](#reference/timeseries/timeseries-operations/get-all-recorded-timeseries-for-a-response))
 
 See below for [advanced workflows](#reference/details).
@@ -74,7 +74,7 @@ Advanced (administrative) workflows are supported in v1.1 of our API.
 #### Respondent workflow for participating in Research
 
 1. Register response containing answers to survey questions
-2. Register link to face video
+2. Register link to FaceVideo
 
 ### Simple FaceVideo analysis
 A simple way to analyse a FaceVideo without doing several steps, such creating a Research, assigning Respondents and others, is to use the [FaceVideo [POST]](#reference/face-videos/face-video-operations/analyse-face-video) endpoint.
@@ -90,8 +90,6 @@ Currently we have implemented:
 * the _advanced level_ (API v1.1) all the basic entities that can help store and manage an entire project.
 
 To help our customers, each method or group of methods in this documentation has a label indicating its implementation status.
-
-We are currently in _beta_ stage so expect some instability and incomplete features.
 
 ## Video Formats and Characteristics
 Our plan is to reach a point at which we will be able to accept any video format with any attributes
@@ -290,8 +288,7 @@ For example, they can be useful when associating additional information to a use
     + research_id (required, string, `3`) ... research id
 
 ### List all research [GET /v1/research]
-
-Returns all the research created by the admin user when logged in with an admin account
+Returns all the Research created by the admin user when logged in with an admin account.
 
 + Response 200 (application/json)
 
@@ -302,10 +299,9 @@ Returns all the research created by the admin user when logged in with an admin 
         }]
 
 ### Create new research [POST /v1/research]
+New research can only be created with an admin account.
 
-New research may only be created with an admin account
-
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {
             "title": "Research 2",
@@ -334,7 +330,7 @@ New research may only be created with an admin account
             "company_id": 1
         }
 
-### Get research details [GET]
+### Get Research details [GET]
 
 + Response 200 (application/json)
 
@@ -365,10 +361,9 @@ New research may only be created with an admin account
         }
 
 ### Edit research details [PUT]
+You can only edit research with admin access.
 
-You may only edit research with admin access
-
-+ Request 200 (application/json)
++ Request  (application/json)
 
         { "complete": true }
 
@@ -401,21 +396,21 @@ You may only edit research with admin access
         }
 
 ### Delete research [DELETE]
-You may only delete research with admin access
+You can only delete research with admin access.
 
 + Response 200 (application/json)
 
 
-
 # Group Media
-We provide a way to store metadata about the stimuli shown to respondents as a mean to gather information
-in one place to augment the analysis phase outcomes.
+We provide a way to store metadata about the stimuli shown to respondents as a
+mean to gather information in one place to augment the analysis phase outcomes.
 
-We also provide storage and streaming support for the actual video files as a courtesy to our customers.
+We also provide storage and streaming support for the actual video files as a
+courtesy to our customers.
 
 ## Media Operations [/v1/media]
 
-### List all registered media [GET]
+### List all registered Media [GET]
 
 + Response 200 (application/json)
 
@@ -488,12 +483,14 @@ We also provide storage and streaming support for the actual video files as a co
 
 
 ### Create new media [POST]
-You can post JSON or multipart/form-data: in the first case you can use the `mediaPath` field to specify a URL for the media, in the second case
-the `filename` holds the binary data of the media file.
+You can post JSON or multipart/form-data.
+
+In the first case you can use the `mediaPath` field to specify a URL for the
+media, in the second case the `filename` holds the binary data of the media file.
 
 > _TODO_ Add a content field to JSON to let the file be uploaded as base64 encoded binary data.
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {
           "name": "Motivational!",
@@ -550,8 +547,8 @@ the `filename` holds the binary data of the media file.
 ### Media details [GET /v1/media/{media_id}{?presignedUrl}]
 
 + Parameters
-    + media_id: `254` (integer, required) - research content id.
-    + presignedUrl: `true` (boolean, optional) - returns the `presignedUrl` whose value is a signed (protected) URL to hosted video on our premises
+    + media_id: `254` (integer, required) - Research content id.
+    + presignedUrl: `true` (boolean, optional) - Returns the `presignedUrl` whose value is a signed (protected) URL to hosted video on our premises.
         + Default: `false`
 
 + Response 200 (application/json)
@@ -593,9 +590,9 @@ the `filename` holds the binary data of the media file.
 ### Edit media details [PUT /v1/media/{media_id}]
 
 + Parameters
-    + media_id: `254` (integer, required) - research content id.
+    + media_id: `254` (integer, required) - Research content id.
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         { "name": "test 1" }
 
@@ -628,22 +625,27 @@ the `filename` holds the binary data of the media file.
 
 
 # Group Respondents
-A Respondent represents a user taking a test composed by a Research and one or more Media; it is linked to
-one or more Responses.
+A Respondent represents a user taking a test composed by a Research and one or
+more Media; it is linked to one or more Responses.
 
-It is then linked to as many Responses (and so to a FaceVideo) as Media, one Response for each Media.
+The Respondent is then linked to as many Responses (and so to a FaceVideo) as
+Media, one Response for each Media.
 
 ## Respondent operations [/v1/respondent/{respondent_id}]
 
 + Parameters
-    + respondent_id (required, number, `1`) - respondent id.
+    + respondent_id: `1` (required, number) - Respondent id.
 
-### List all Research respondents [GET /v1/respondent{?research_id}]
-Respondent `GET` implements the general rules for [searching](#header-paging,-searching-and-sorting),
-this is given only as a practical example.
+### List all Respondents of a Research [GET /v1/respondent{?research_id,skip,limit,where,sort}]
+Returns all the Respondents implementing the general rules for
+[paging, searching and sorting](#reference/details).
 
 + Parameters
     + research_id: 56 (required, number) - Search by research id.
+    + skip: 1000 (optional, number) - The number of results to skip.
+    + limit: 1000 (optional, number) - The maximum number of results to return.
+    + where: {"research_id":56} (optional, string) - JSON formatted string condition. Cannot be combined with `research_id` parameter.
+    + sort: "research_id" (optional, string) - Attribute used to sort results.
 
 + Response 200 (application/json)
 
@@ -669,9 +671,9 @@ this is given only as a practical example.
         ]
 
 
-### Create new respondent [POST /v1/respondent]
+### Create a Respondent [POST /v1/respondent]
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {
             "name": "aname",
@@ -692,7 +694,7 @@ this is given only as a practical example.
         }
 
 
-### Get respondent details [GET]
+### Find a Respondent [GET]
 
 + Response 200 (application/json)
 
@@ -707,9 +709,9 @@ this is given only as a practical example.
         }
 
 
-### Edit respondent details [PUT]
+### Update a Respondent [PUT]
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         { "name": "anothername" }
 
@@ -724,7 +726,7 @@ this is given only as a practical example.
         "modified": "2014-01-23T14:15:14",
         "username": "johnsmith"}
 
-### Delete respondent [DELETE]
+### Delete a Respondent [DELETE]
 
 + Response 200 (text/plain)
 
@@ -736,11 +738,11 @@ For example, they can be useful when associating a user from one system (e.g. a 
 Respondent Metadata are different from Response Metadata in that the scope is an entire test session.
 
 + Parameters
-    + respondent_id (required, number, `218`) ... respondent id.
+    + respondent_id: `218` (required, number) - Respondent id.
 
 ### Add Respondent Metadata [POST]
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {
           "data": {
@@ -759,7 +761,7 @@ Respondent Metadata are different from Response Metadata in that the scope is an
           }
         }
 
-### Get Respondent Metadata [GET]
+### Find Respondent Metadata [GET]
 
 + Response 200 (application/json)
 
@@ -779,7 +781,15 @@ Respondent Metadata are different from Response Metadata in that the scope is an
 + Parameters
     + response_id (required, integer, `1`) ... response id.
 
-### List all Responses [GET /v1/response]
+### Find all Responses [GET /v1/response{?skip,limit,where,sort}]
+Returns all the Responses implementing the general rules for
+[paging, searching and sorting](#reference/details).
+
++ Parameters
+    + skip: 1000 (optional, number) - The number of results to skip.
+    + limit: 1000 (optional, number) - The maximum number of results to return.
+    + where: {"research_id":56} (optional, string) - JSON formatted string condition. Cannot be combined with `research_id` parameter.
+    + sort: "research_id" (optional, string) - Attribute used to sort results.
 
 + Response 200 (application/json)
 
@@ -814,9 +824,9 @@ Respondent Metadata are different from Response Metadata in that the scope is an
           }
         ]
 
-### Create a new Response [POST /v1/response]
+### Create a Response [POST /v1/response]
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {"research_id":1, "media_id":2, "respondent_id": 3}
 
@@ -835,7 +845,7 @@ Respondent Metadata are different from Response Metadata in that the scope is an
           "company_id": 1
         }
 
-### Show Response details [GET]
+### Find a Response [GET]
 
 + Response 200 (application/json)
 
@@ -843,7 +853,7 @@ Respondent Metadata are different from Response Metadata in that the scope is an
 
 ### Update a Response [PUT]
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {"research_id":2}
 
@@ -870,22 +880,23 @@ Respondent Metadata are different from Response Metadata in that the scope is an
 ## Response Metadata Operations [/v1/response/{response_id}/metadata]
 Any sort of metadata can be associated with each Response.
 
-For example, they can be useful when associating a user response from one system (e.g. a survey app) to our API.
+For example, they can be useful when associating a user response from one system
+(e.g. a survey app) to our API.
 
-Response Metadata are different from Respondent Metadata in that the scope is only a single Media inside a
-complete test session.
+Response Metadata is different from Respondent Metadata which scope is
+only a single Media inside a complete session.
 
 + Parameters
     + response_id (required, integer, `1`) ... response id.
 
-### Show response metadata [GET]
+### Show Response metadata [GET]
 + Response 200 (application/json)
 
         {"response_id":"1","data": [{"key1":"value1"},{"key2":"value2"}]}
 
 ### Update response metadata [POST]
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {"data": [{"key1":"value3"},{"key4":"value4"}}
 
@@ -893,35 +904,33 @@ complete test session.
 
 
 
-# Group Face Videos
-Use these methods to do an ad-hoc analysis of one face video.
+# Group FaceVideos
+Use these methods to do an ad-hoc analysis of one FaceVideo.
 
 There are three API methods to upload a video file so there are three elements to pay attention to:
 the URL, the HTTP method and the request body.
 
-The choice depends on how to upload the files: through a full URL reachable from the Internet,
-or directly including the file binary stream in the request body, respectively using a POST with
+The choice depends on how to upload the files:
+1. through a full URL reachable from the Internet
+2. directly including the file binary stream in the request body, respectively using a POST with
 multipart-formatted body, or a PUT simply including only the binary stream in the request body.
 
-## Face Video Operations [/v1/facevideo{?sandbox,response_id,research_id,media_id,respondent_id,processVideo}]
+## FaceVideo Operations [/v1/facevideo{?sandbox,response_id,research_id,media_id,respondent_id,processVideo}]
 + Parameters
-    + sandbox (optional, boolean) - generates random data for testing, at no cost.
+    + sandbox (optional, boolean) - Generates random data for testing, at no cost.
         + Default: `false`
-    + response_id (optional, number) - associates this Facevideo to a previously generated Response.
-    + research_id (optional, number) - associates this Facevideo to a previously generated Research.
-    + media_id (optional, number) - associates this Facevideo to a previously generated Media.
-    + respondent_id (optional, number) - associates this Facevideo to a previously generated Respondent.
-    + processVideo (optional, boolean) ... actually processes the video.
+    + response_id (optional, number) - Associates this Facevideo to a previously generated Response.
+    + research_id (optional, number) - Associates this Facevideo to a previously generated Research.
+    + media_id (optional, number) - Associates this Facevideo to a previously generated Media.
+    + respondent_id (optional, number) - Associates this Facevideo to a previously generated Respondent.
+    + processVideo (optional, boolean) - Actually processes the video.
         + Default: `true`
 
-### Analyse face video [POST]
-
-Starts the analysis of a single face video (in the supported formats) through either:
+### Analyse FaceVideo [POST]
+Starts the analysis of a single FaceVideo (in the supported formats) through either:
 
 1. a video URL pointing to a resource accessible through the Internet without authentication
-2. the binary contents of the video in the request' body, encoded as `multipart/form-data` content type
-
-Alias of this operation: `/v1/facevideo/upload`.
+2. the binary contents of the video in the request's body, encoded as `multipart/form-data` content type
 
 The third option is a `PUT` call to `/v1/facevideo/{filename}` (`filename` required string e.g. `facevideo1.mp4`)
 which supports all the URL parameters as above with an body encoding `application/octet-stream` and
@@ -929,11 +938,11 @@ the file contents as plain binary: this call makes uploads more efficient but it
 standards so it may be not supported in future.
 
 
-+ Request 200 (application/json)
++ Request  (application/json)
 
         {"link": "http://example.com/facevideo1.mp4"}
 
-+ Request 200 (multipart/form-data; boundary=Boundary_1_206808442_1400796574215)
++ Request  (multipart/form-data; boundary=Boundary_1_206808442_1400796574215)
 
         --Boundary_1_206808442_1400796574215
         Content-Type: application/octet-stream
@@ -947,13 +956,13 @@ standards so it may be not supported in future.
         {"id": 1, "responseId": 1, "fileName": "facevideo1.mp4", "status": 0, "numFrames": 0, "md5":"XXX", "frameRate": 1, "celocation": "AAAA"}
 
 
-### Single Face Video details [GET /v1/facevideo/{response_id?facevideo_id}]
+### Find a FaceVideo [GET /v1/facevideo/{?facevideo_id,response_id}]
+Use this operation to access information about the FaceVideo analysis.
 
-Use this operation to access information about the face video analysis.
+_Any one of the two parameters must be specified._
 
-Either one of the two parameters must be specified.
-
-To discover if the video has been analyzed through the value of ``status`` field whose values are:
+To discover if the video has been analyzed, check the meaning of `status` field
+in the following table:
 
 |Value|Description         |
 |-----|--------------------|
@@ -964,8 +973,8 @@ To discover if the video has been analyzed through the value of ``status`` field
 
 
 + Parameters
-    + response_id (optional, string, `1`) - response id corresponding to the face video.
-    + facevideo_id (optional, string, `1`) - facevideo id corresponding to the face video.
+    + facevideo_id: 1 (optional, string) - FaceVideo id corresponding to the FaceVideo. *Only this parameter is considered if both are specified.*
+    + response_id: 1 (optional, string) - Response id corresponding to the FaceVideo.
 
 
 + Response 200 (application/json)
@@ -991,7 +1000,7 @@ To discover if the video has been analyzed through the value of ``status`` field
             }
 
 
-### Delete a face video [DELETE /v1/facevideo/{facevideo_id}]
+### Delete a FaceVideo [DELETE /v1/facevideo/{facevideo_id}]
 
 + Response 200 (text/plain)
 
@@ -1018,7 +1027,7 @@ Common metric ID are listed below:
 
 ## Metrics Operations [/v1/metric/{metric_id}]
 + Parameters
-    + metric_id (required, integer, `1`) ... metric id.
+    + metric_id (required, integer, `1`) ... Metric id.
 
 ### List all registered metrics [GET /v1/metric]
 + Response 200 (application/json)
@@ -1075,8 +1084,8 @@ Common metric ID are listed below:
         ]
 
 
-### Register new metric [POST /v1/metric]
-+ Request 200 (application/json)
+### Create Metric [POST /v1/metric]
++ Request  (application/json)
 
         {"Name": "Surprise", "description": "Surprise expression"}
 
@@ -1084,13 +1093,13 @@ Common metric ID are listed below:
 
         {"id": 4, "name": "Surprise", "description": "Surprise expression"}
 
-### Show metric details [GET]
+### Find a Metric [GET]
 
 + Response 200 (application/json)
 
         {"id": 1, "name": "Happiness", "description": "Happiness expression"}
 
-### Remove metric [DELETE]
+### Delete a Metric [DELETE]
 
 + Response 200 (text/plain)
 
@@ -1099,11 +1108,11 @@ Common metric ID are listed below:
 # Group Timeseries
 ## Timeseries Operations [/v1/timeseries{?response_id,metric_id,normalize,format}]
 + Parameters
-    + response_id (required, integer, `45178`) ... response id.
-    + metric_id (optional, integer) ... metric id, can be multiple separated by comma: `1,3,4`. If not specified, all timeseries will be passed back
-    + normalize (optional, boolean) ... return data beetwen 0 and 1
+    + response_id: 45178 (required, integer) - Response id.
+    + metric_id: 1 (optional, integer) - Metric id, can be multiple values separated by comma: `1,3,4`. If not specified, all timeseries will be passed back.
+    + normalize: false (optional, boolean) - Return data beetwen 0 and 1.
         + Default: false
-    + format (optional, string) ... if value == 'csv' data is passed back in CSV format instead of the default timeseries format
+    + format: csv (optional, string) - If value is 'csv' then data is passed back in CSV format instead of the default timeseries format.
 
 ### Get all recorded timeseries for a Response [GET]
 
@@ -1455,7 +1464,7 @@ Common metric ID are listed below:
 
 ### Delete timeseries [DELETE /v1/timeseries{?response_id,metric_id}]]
 + Parameters
-    + response_id (required, integer, `1`) ... response id.
-    + metric_id (optional, integer, `1`) ... response id.
+    + response_id: 123 (required, integer) - Id of the Response associated to the Timeseries.
+    + metric_id: 123 (optional, integer) - Id of the Metric of the Timeseries to be deleted.
 
 + Response 200 (text/plain)
