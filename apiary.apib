@@ -1,7 +1,7 @@
 FORMAT: 1A
 HOST: https://api.crowdemotion.co.uk
 
-# CloudEmotion API v1.1
+# CloudEmotion API v1
 Welcome to CloudEmotion by [CrowdEmotion](http://www.crowdemotion.co.uk), an API that enables developers, academics and businesses to explore
 emotional measures across different industries and cultures.
 CloudEmotion achieves this by providing access to our machine-learning process for tracking micro-facial expressions and linking them to
@@ -9,8 +9,8 @@ emotions.
 
 We look to your creativity and feedback on reshaping user empowerment through data.
 
-The base address of the API is [http://api.crowdemotion.co.uk](http://api.crowdemotion.co.uk).
-Almost all endpoints are restricted and a user will require an account to be able to save or
+The base address of the API is [https://api.crowdemotion.co.uk](https://api.crowdemotion.co.uk).
+All endpoints are restricted and a user must create an account to be able to save or
 get information through them. See more information in _Authentication_ section.
 
 Following there is detailed information about the API functionality and some
@@ -20,32 +20,25 @@ If you prefer, go straightforward to the [endpoints documentation](#reference/ac
 
 ## Overview
 
-### Basic Workflow
+### API Version History
 
-1. Capture videos of faces using a webcam or equipment of your choice
-2. Upload the FaceVideos using CloudEmotion for processing ([FaceVideo [POST] or [PUT]](#reference/facevideos/facevideo-operations/analyse-facevideo))
-3. Retrieve the results ([timeseries [GET]](#reference/timeseries/timeseries-operations/get-all-recorded-timeseries-for-a-response))
+Current specific version of the API is **v1.1**.
 
-See below for [advanced workflows](#introduction/details/advanced-workflows).
+Please, remember to append the major version of the API to the base URL when
+interacting with it. For v1.1, the complete URL should be:
+[https://api.crowdemotion.co.uk/v1](https://api.crowdemotion.co.uk/v1).
 
+*NOTE: We are currently in _beta_ stage.*
 
 ### Results
 
 #### Universal emotions
-
 The API returns timeseries of the six universal emotions (happiness, surprise, anger, disgust, fear and sadness) defined by Dr. Paul Ekman’s
 Facial Action Coding System ([FACS](http://en.wikipedia.org/wiki/Facial_Action_Coding_System)).
 
 Check out more about Dr. Ekman on his [website](http://www.paulekman.com/paul-ekman/) or [Wikipedia](http://en.wikipedia.org/wiki/Paul_Ekman).
 
-#### Engagement and mood
-
-We also report the timeseries of positive mood, negative mood and engagement for each video processed. These are linear combinations of the positive
-(happiness and surprise), negative (anger, disgust, fear and sadness) and all universal emotions respectively.
-
-
 ### Setting up your account
-
 To be able to use CloudEmotion API, just sign up at https://maker.crowdemotion.co.uk/.
 
 Follow us [@CrowdEmotion](https://twitter.com/crowdemotion) on Twitter to get updates.
@@ -53,61 +46,52 @@ Follow us [@CrowdEmotion](https://twitter.com/crowdemotion) on Twitter to get up
 
 ## Details
 
-### Sandbox Mode
-A sandbox mode is available for free testing.
+### Sandbox mode
+A sandbox mode is available to do testing for free.
 
 Just set the `sandbox` parameter equal to `true` in [FaceVideo [POST]](#reference/facevideos/facevideo-operations/analyse-facevideo) methods.
 The API calls are identical but the results are randomly generated.
 
+### API usage examples
 
-### Advanced workflows
-Advanced (administrative) workflows are supported in v1.1 of our API.
+#### Analyse FaceVideo quickly
 
-#### Examples
+1. Capture videos of faces using a webcam or equipment of your choice
+2. Upload the FaceVideos using CloudEmotion for processing ([FaceVideo [POST] or [PUT]](#reference/facevideos/facevideo-operations/analyse-facevideo)). This will automatically create the metadata required to register the FaceVideo and return the Response's id for accessing the results.
+3. To check for analysis completion, just call the [FaceVideo [GET]](#reference/facevideos/facevideo-operations/find-a-facevideo) endpoint.
+4. Retrieve the results using the [Timeseries [GET]](#reference/timeseries/timeseries-operations/get-all-recorded-timeseries-for-a-response)) endpoint.
 
-##### Administrative workflow for starting new research
+#### Administrative workflow for starting a new Research
 
-1. Register new Respondents to participate in Research
-2. Register Media for presenting to respondents
-3. Create new Research
+1. [Register new Respondents](#reference/respondents/respondent-operations/create-a-respondent) to participate in Research
+2. [Register Media](#reference/media/media-operations/create-new-media) for presenting to respondents
+3. [Create new Research](#reference/research/research-operations/create-new-research)
 4. Create links to Media
 5. Assign Respondents to Research
 
-##### Respondent workflow for participating in Research
+#### Respondent workflow for participating in Research
 
 1. Register response containing answers to survey questions
 2. Register link to FaceVideo
 
-#### Simple FaceVideo analysis
-A simple way to analyse a FaceVideo without doing several steps, such creating a Research, assigning Respondents and others, is to use the [FaceVideo [POST]](#reference/facevideos/facevideo-operations/analyse-facevideo) endpoint.
-This will automatically create the metadata required to register the FaceVideo and return the Response's id for accessing the results.
-
-To check for analysis completion, just call the [FaceVideo [GET]](#reference/facevideos/facevideo-operations/find-a-facevideo) endpoint.
-
-
-### Implementation Status
-Currently we have implemented:
-
-* the _basic level_ (API v1.0) i.e. the respondent workflow calls which are described in [FaceVideo group methods](#reference/facevideos)
-* the _advanced level_ (API v1.1) all the basic entities that can help store and manage an entire project.
-
-To help our customers, each method or group of methods in this documentation has a label indicating its implementation status.
 
 ### Video Formats and Characteristics
 Our plan is to reach a point at which we will be able to accept any video format with any attributes
 (size, FPS, etc.) but we prefer videos with the following characteristics:
 
-* format: MP4
-* encoding: H263/H264
-* size (in pixels): min 320x240, best 640x480
+**Formats:**
+* MP4
+    * Encoding: H263/H264
+* FLV
+    * Encoding: Sorenson Spark
+* WEBM
+    * Encoding: VP8
+
+**Characteristics that apply to all formats:**
+* Size (in pixels): min 320x240, best 640x480
 * FPS: min 5 - max 50
-* bitrate: at least 100Kbps
-* audio: not needed (yet)
-
-We also accept FLV files encoded with _Sorenson Spark_ as a convenience for customers
-since Flash recording is a very common task accomplished using this old format.
-
-With the advent of HTML5 standards, we accept also WEBM/VP8 encoding.
+* Bitrate: at least 100Kbps
+* Audio: not needed (yet)
 
 ### Support
 Please contact us at support@crowdemotion.co.uk if you have any questions.
@@ -183,10 +167,14 @@ Please refer to our client implementations for details.
 ### Authorization
 The API defines a number of roles that have limitations on the operations that can be performed.
 
-A newly created user on the API can execute any operation but to avoid data leaks and data loss, it is
-advisable to create a new token with lower authorization level and use it in your implementation.
+A newly created user on the API can execute any operation but to avoid data
+leaks and data loss, it is advisable to create a new token with lower
+authorization level and use it in your implementation.
 
-> _TODO_ List all operations' permissions.
+Currently, the available authorization levels are:
+1. Respondent
+2. Customer
+3. Manager
 
 
 ## API Clients
@@ -288,8 +276,8 @@ For example, they can be useful when associating additional information to a use
 + Parameters
     + research_id (required, string, `3`) ... research id
 
-### List all research [GET /v1/research{?skip,limit,where,sort}]
-Returns all the Research created by the admin user when logged in with an admin account.
+### Find all Research [GET /v1/research{?skip,limit,where,sort}]
+Returns all the Research created by an admin user.
 
 + Parameters
     + skip: 1000 (optional, number) - The number of results to skip.
@@ -343,6 +331,7 @@ New research can only be created with an admin account.
 
         {
             "id": 165,
+            "timeCreated": "2015-03-09T22:42:07.000Z",
             "uuid": "36795949-2c4a-4008-ac70-4e542306d68f",
             "key": "f4fdce7ac01c3dbc66d9884588727886dcc43b90",
             "title": "Research 2",
@@ -455,6 +444,7 @@ courtesy to our customers.
                 "modified": null
               }
             ],
+            "presignedUrl": "https://examplecdn.com/media/1/ac5b07a4-fc65-4ca6-92c8-089ce9682769.mp4?accessKeyId=XXXXXXXXXX&Expires=1446078684&Signature=YYYYYYYY%3D",
             "isStored": false,
             "isURL": true,
             "isYouTube": true,
@@ -487,6 +477,7 @@ courtesy to our customers.
                 "modified": null
               }
             ],
+            "presignedUrl": "https://examplecdn.com/media/1/ac5b07a4-fc65-4ca6-92c8-089ce9682769.mp4?accessKeyId=XXXXXXXXXX&Expires=1446078684&Signature=YYYYYYYY%3D",
             "isStored": true,
             "isURL": false,
             "isYouTube": false,
@@ -809,6 +800,7 @@ Returns all the Responses implementing the general rules for
         [
           {
             "id": 59097,
+            "timeCreated": "2015-04-22T17:03:00.000Z",
             "research_id": 239,
             "media_id": 363,
             "respondent_id": 25484,
@@ -823,6 +815,7 @@ Returns all the Responses implementing the general rules for
           },
           {
             "id": 59099,
+            "timeCreated": "2015-12-07T10:05:23.000Z",
             "research_id": 239,
             "media_id": 363,
             "respondent_id": 25488,
@@ -862,7 +855,21 @@ Returns all the Responses implementing the general rules for
 
 + Response 200 (application/json)
 
-        {"id": 1, "research_id": 1, "respondent_id": 1, "media_id": 1}
+        {
+          "id": 105795,
+          "timeCreated": "2015-04-22T17:03:00.000Z",
+          "research_id": 488,
+          "media_id": 723,
+          "respondent_id": 57993,
+          "user_id": 57993,
+          "researchId": 488,
+          "mediaId": 723,
+          "respondentId": 57993,
+          "userId": 57993,
+          "complete": true,
+          "used": true,
+          "company_id": 223
+        }
 
 ### Update a Response [PUT]
 
@@ -928,7 +935,10 @@ The choice depends on how to upload the files:
 2. directly including the file binary stream in the request body, respectively using a POST with
 multipart-formatted body, or a PUT simply including only the binary stream in the request body.
 
+**NOTE: the use of FaceVideo endpoints can incur in costs.**
+
 ## FaceVideo Operations [/v1/facevideo{?sandbox,response_id,research_id,media_id,respondent_id,processVideo}]
+
 + Parameters
     + sandbox (optional, boolean) - Generates random data for testing, at no cost.
         + Default: `false`
@@ -995,21 +1005,23 @@ in the following table:
 
             {
               "id": 1,
-              "timeCreated": "2014-03-25T15:00:43.000Z",
-              "filename": null,
-              "fqAvg": null,
-              "fqStddev": null,
-              "frameRate": -1,
-              "numFrames": null,
-              "remoteLocation": "http://example.com/facevideo1.mp4",
-              "status": 0,
-              "statusText": "Not yet started",
-              "statusMessage": null,
-              "responseId": 11,
-              "md5": null,
-              "lengthMS": null,
-              "lengthS": null,
-              "framesProcessed": null
+              "timeCreated": "2014-03-25T11:53:09.000Z",
+              "filename": "trailer.webm",
+              "fqAvg": 1,
+              "fqStddev": 0,
+              "frameRate": 25,
+              "numFrames": 1252,
+              "remoteLocation": "http://example.com/trailer.webm",
+              "status": 2,
+              "statusText": "Done",
+              "statusMessage": "Analysis complete",
+              "responseId": 1,
+              "md5": "37cfce863d65995b9c173f3526d833ef",
+              "lengthMS": 52663,
+              "lengthS": 52.663,
+              "framesProcessed": 1252,
+              "processingTime": 4910,
+              "engineVersion": 0
             }
 
 
