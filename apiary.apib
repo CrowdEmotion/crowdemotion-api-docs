@@ -198,7 +198,10 @@ Following is a list of client implementations available in several programming l
 ### Authenticate using credentials [POST]
 Returned values `userId` and `token` should be stored for subsequent API calls.
 
-+ Request (application/json)
+**Authorization level required:**
+* No authorization is required
+
++ Request  (application/json)
 
         {"username": "customerAccount", "password": "customerPassword"}
 
@@ -212,6 +215,10 @@ Returned values `userId` and `token` should be stored for subsequent API calls.
     + user_id (required, integer, `1`) ... User id.
 
 ### Get user information [GET]
+**Authorization level required:**
+* Respondent
+* Customer
+* Manager
 
 + Response 200 (application/json)
 
@@ -231,6 +238,8 @@ Returned values `userId` and `token` should be stored for subsequent API calls.
         }
 
 ### Edit user information [PUT]
+**Authorization level required:**
+* Manager
 
 + Request (application/json)
 
@@ -255,12 +264,20 @@ For example, they can be useful when associating additional information to a use
     + user_id: 1 (integer, required) - Unique identifier for a user.
 
 ### Find user metadata [GET]
+**Authorization level required:**
+* Respondent
+* Customer
+* Manager
 
 + Response 200 (application/json)
 
         {"user_id": "1", "data": {"key1":"value1", "key2":"value2"}}
 
 ### Add user metadata [POST]
+**Authorization level required:**
+* Respondent
+* Customer
+* Manager
 
 + Request (application/json)
 
