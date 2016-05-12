@@ -198,8 +198,7 @@ Following is a list of client implementations available in several programming l
 ### Authenticate using credentials [POST]
 Returned values `userId` and `token` should be stored for subsequent API calls.
 
-**Authorization level required:**
-* No authorization is required
+**Permissions:** No authorization is required
 
 + Request  (application/json)
 
@@ -215,10 +214,7 @@ Returned values `userId` and `token` should be stored for subsequent API calls.
     + user_id (required, integer, `1`) ... User id.
 
 ### Get user information [GET]
-**Authorization level required:**
-* Respondent
-* Customer
-* Manager
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Response 200 (application/json)
 
@@ -238,8 +234,7 @@ Returned values `userId` and `token` should be stored for subsequent API calls.
         }
 
 ### Edit user information [PUT]
-**Authorization level required:**
-* Manager
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Request (application/json)
 
@@ -264,20 +259,14 @@ For example, they can be useful when associating additional information to a use
     + user_id: 1 (integer, required) - Unique identifier for a user.
 
 ### Find user metadata [GET]
-**Authorization level required:**
-* Respondent
-* Customer
-* Manager
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Response 200 (application/json)
 
         {"user_id": "1", "data": {"key1":"value1", "key2":"value2"}}
 
 ### Add user metadata [POST]
-**Authorization level required:**
-* Respondent
-* Customer
-* Manager
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Request (application/json)
 
@@ -296,6 +285,8 @@ For example, they can be useful when associating additional information to a use
 ### Find all Research [GET /v1/research{?skip,limit,where,sort}]
 Returns all the Research created by an admin user.
 
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Parameters
     + skip: 1000 (optional, number) - The number of results to skip.
     + limit: 1000 (optional, number) - The maximum number of results to return.
@@ -310,8 +301,10 @@ Returns all the Research created by an admin user.
           "id": 2, "title": "Research 2"
         }]
 
-### Create new research [POST /v1/research]
+### Create a Research [POST /v1/research]
 New research can only be created with an admin account.
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -342,7 +335,9 @@ New research can only be created with an admin account.
             "company_id": 1
         }
 
-### Get Research details [GET]
+### Find a Research [GET]
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Response 200 (application/json)
 
@@ -375,6 +370,8 @@ New research can only be created with an admin account.
 
 ### Edit research details [PUT]
 You can only edit research with admin access.
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -411,6 +408,8 @@ You can only edit research with admin access.
 ### Delete research [DELETE]
 You can only delete research with admin access.
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (application/json)
 
 
@@ -424,6 +423,8 @@ courtesy to our customers.
 ## Media Operations [/v1/media{?skip,limit,where,sort}]
 
 ### List all registered Media [GET]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Parameters
     + skip: 1000 (optional, number) - The number of results to skip.
@@ -509,6 +510,8 @@ You can post JSON or multipart/form-data.
 In the first case you can use the `mediaPath` field to specify a URL for the
 media, in the second case the `filename` holds the binary data of the media file.
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 > _TODO_ Add a content field to JSON to let the file be uploaded as base64 encoded binary data.
 
 + Request  (application/json)
@@ -565,7 +568,9 @@ media, in the second case the `filename` holds the binary data of the media file
         }
 
 
-### Media details [GET /v1/media/{media_id}{?presignedUrl}]
+### Find a Media [GET /v1/media/{media_id}{?presignedUrl}]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Parameters
     + media_id: `254` (integer, required) - Research content id.
@@ -608,7 +613,9 @@ media, in the second case the `filename` holds the binary data of the media file
           "videodetails": null
         }
 
-### Edit media details [PUT /v1/media/{media_id}]
+### Update a Media [PUT /v1/media/{media_id}]
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Parameters
     + media_id: `254` (integer, required) - Research content id.
@@ -638,6 +645,8 @@ media, in the second case the `filename` holds the binary data of the media file
 
 ### Delete media [DELETE /v1/media/{media_id}]
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Parameters
     + media_id: `254` (integer, required) - research content id.
 
@@ -660,6 +669,8 @@ Media, one Response for each Media.
 ### List all Respondents of a Research [GET /v1/respondent{?research_id,skip,limit,where,sort}]
 Returns all the Respondents implementing the general rules for
 [paging, searching and sorting](#reference/details).
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Parameters
     + research_id: 56 (required, number) - Search by research id.
@@ -694,6 +705,8 @@ Returns all the Respondents implementing the general rules for
 
 ### Create a Respondent [POST /v1/respondent]
 
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Request  (application/json)
 
         {
@@ -717,6 +730,8 @@ Returns all the Respondents implementing the general rules for
 
 ### Find a Respondent [GET]
 
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (application/json)
 
         {
@@ -731,6 +746,8 @@ Returns all the Respondents implementing the general rules for
 
 
 ### Update a Respondent [PUT]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -749,6 +766,8 @@ Returns all the Respondents implementing the general rules for
 
 ### Delete a Respondent [DELETE]
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (text/plain)
 
 ## Respondent Metadata Operations [/v1/respondent/{respondent_id}/metadata]
@@ -762,6 +781,8 @@ Respondent Metadata are different from Response Metadata in that the scope is an
     + respondent_id: `218` (required, number) - Respondent id.
 
 ### Add Respondent Metadata [POST]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -784,6 +805,8 @@ Respondent Metadata are different from Response Metadata in that the scope is an
 
 ### Find Respondent Metadata [GET]
 
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (application/json)
 
         {
@@ -805,6 +828,8 @@ Respondent Metadata are different from Response Metadata in that the scope is an
 ### Find all Responses [GET /v1/response{?skip,limit,where,sort}]
 Returns all the Responses implementing the general rules for
 [paging, searching and sorting](#reference/details).
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Parameters
     + skip: 1000 (optional, number) - The number of results to skip.
@@ -849,6 +874,8 @@ Returns all the Responses implementing the general rules for
 
 ### Create a Response [POST /v1/response]
 
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Request  (application/json)
 
         {"research_id":1, "media_id":2, "respondent_id": 3}
@@ -870,6 +897,8 @@ Returns all the Responses implementing the general rules for
 
 ### Find a Response [GET]
 
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (application/json)
 
         {
@@ -889,6 +918,8 @@ Returns all the Responses implementing the general rules for
         }
 
 ### Update a Response [PUT]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -911,6 +942,8 @@ Returns all the Responses implementing the general rules for
 
 ### Delete a Response [DELETE]
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (text/plain)
 
 
@@ -927,11 +960,16 @@ only a single Media inside a complete session.
     + response_id (required, integer, `1`) ... response id.
 
 ### Show Response metadata [GET]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (application/json)
 
         {"response_id":"1","data": [{"key1":"value1"},{"key2":"value2"}]}
 
-### Update response metadata [POST]
+### Add Response metadata [POST]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -977,6 +1015,7 @@ which supports all the URL parameters as above with an body encoding `applicatio
 the file contents as plain binary: this call makes uploads more efficient but it does not respect HTTP/RESTful
 standards so it may be not supported in future.
 
+**Permissions:** ✓ Respondent ✓ Customer ✓ Manager
 
 + Request  (application/json)
 
@@ -1011,6 +1050,7 @@ in the following table:
 | 2   | Processing complete|
 |-1   | Error              |
 
+**Permissions:** ✓ Respondent ✓ Customer ✓ Manager
 
 + Parameters
     + facevideo_id: 1 (optional, string) - FaceVideo id corresponding to the FaceVideo. *Only this parameter is considered if both are specified.*
@@ -1044,6 +1084,8 @@ in the following table:
 
 ### Delete a FaceVideo [DELETE /v1/facevideo/{facevideo_id}]
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (text/plain)
 
         "OK"
@@ -1072,6 +1114,8 @@ Common metric ID are listed below:
     + metric_id (required, integer, `1`) ... Metric id.
 
 ### List all registered metrics [GET /v1/metric{?skip,limit,where,sort}]
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Parameters
     + skip: 1000 (optional, number) - The number of results to skip.
@@ -1134,6 +1178,9 @@ Common metric ID are listed below:
 
 
 ### Create Metric [POST /v1/metric]
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Request  (application/json)
 
         {"Name": "Surprise", "description": "Surprise expression"}
@@ -1144,11 +1191,15 @@ Common metric ID are listed below:
 
 ### Find a Metric [GET]
 
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Response 200 (application/json)
 
         {"id": 1, "name": "Happiness", "description": "Happiness expression"}
 
 ### Delete a Metric [DELETE]
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
 
 + Response 200 (text/plain)
 
@@ -1164,6 +1215,8 @@ Common metric ID are listed below:
     + format: csv (optional, string) - If value is 'csv' then data is passed back in CSV format instead of the default timeseries format.
 
 ### Get all recorded timeseries for a Response [GET]
+
+**Permissions:** ✓ Respondent ✗ Customer ✓ Manager
 
 + Response 200 (application/json)
 
@@ -1512,6 +1565,9 @@ Common metric ID are listed below:
 
 
 ### Delete timeseries [DELETE /v1/timeseries{?response_id,metric_id}]]
+
+**Permissions:** ✗ Respondent ✗ Customer ✓ Manager
+
 + Parameters
     + response_id: 123 (required, integer) - Id of the Response associated to the Timeseries.
     + metric_id: 123 (optional, integer) - Id of the Metric of the Timeseries to be deleted.
